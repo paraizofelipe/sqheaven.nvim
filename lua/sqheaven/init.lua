@@ -22,4 +22,16 @@ function sqheaven.execLines()
     ui.redraw(result)
 end
 
+function sqheaven.switchConnect(name_connect)
+    if name_connect == nil then
+        return
+    end
+    cmd.set_connect(name_connect)
+    sqheaven.showConnect()
+end
+
+function sqheaven.showConnect()
+    print('Current connection: ' .. cmd.name_connect)
+end
+
 return sqheaven
