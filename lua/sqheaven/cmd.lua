@@ -9,6 +9,8 @@ local cmd = {
 cmd.extract_lines = function(coordinates)
   local lines = vim.api.nvim_buf_get_lines(coordinates.bufnr, coordinates.from[1] - 1, coordinates.to[1], false)
 
+  print(vim.inspect(lines))
+
   return lines
 end
 

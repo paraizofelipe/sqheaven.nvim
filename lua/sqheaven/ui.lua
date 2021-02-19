@@ -1,13 +1,16 @@
 local vim = vim
 
-local ui = {}
+local ui = {
+    query_win = 0,
+    result_win = 0,
+}
 
 local buf, win, start_win
 
 --- create_win
 ui.create_win = function()
     start_win = vim.api.nvim_get_current_win()
-    vim.api.nvim_command('botright vnew') -- We open a new vertical window at the far right
+    vim.api.nvim_command('botright new') -- We open a new vertical window at the far right
 
     win = vim.api.nvim_get_current_win() -- We save our navigation window handle...
     buf = vim.api.nvim_get_current_buf() -- ...and it's buffer handle.
@@ -29,14 +32,16 @@ ui.redraw = function (result)
 
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, result)
     vim.api.nvim_buf_set_option(buf, 'modifiable', false)
+
+    vim.api.nvim_set_current_win(ui.query_win)
 end
 
 --- motion
 ui.motion = function(bufnr)
   local b_line, b_col, e_line, e_col
 
-  b_line, b_col = unpack(vim.api.nvim_buf_get_mark(bufnr, '<'))
-  e_line, e_col = unpack(vim.api.nvim_buf_get_mark(bufnr, '>'))
+  b_line, b_col = unpack(vim.api.nvim_buf_get_mark(bufnr, '('))
+  e_line, e_col = unpack(vim.api.nvim_buf_get_mark(bufnr, ')'))
 
   b_col = b_col + 1
   e_col = e_col + 2
@@ -55,6 +60,17 @@ ui.show_win = function()
     else
         ui.create_win()
     end
+end
+
+ui.change_query_file = function(file)
+    vim.api.nvim_set_current_win(ui.query_win)
+    vim.api.nvim_command('edit'..file)
+end
+
+--- start
+ui.start = function(file)
+    vim.api.nvim_command('tabnew'..file)
+    ui.query_win = vim.api.nvim_get_current_win()
 end
 
 
