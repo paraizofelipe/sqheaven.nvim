@@ -10,7 +10,9 @@ function sqheaven.start()
 end
 
 function sqheaven.execLines()
-    local coordinates = ui.motion(0)
+    local bufnr = bufnr or vim.api.nvim_get_current_buf()
+    
+    local coordinates = ui.motion(bufnr)
     local lines = cmd.extract_lines(coordinates)
     local str_query = ""
 

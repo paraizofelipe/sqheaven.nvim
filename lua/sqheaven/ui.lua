@@ -37,8 +37,8 @@ ui.redraw = function (result)
 end
 
 --- motion
-ui.motion = function(bufnr)
-  local b_line, b_col, e_line, e_col
+ui.motion = function(bufnr, mode)
+  local b_line, b_col, e_line, e_col, _
 
   b_line, b_col = unpack(vim.api.nvim_buf_get_mark(bufnr, '('))
   e_line, e_col = unpack(vim.api.nvim_buf_get_mark(bufnr, ')'))

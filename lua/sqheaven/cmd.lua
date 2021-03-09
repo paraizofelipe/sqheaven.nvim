@@ -7,11 +7,21 @@ local cmd = {
 
 --- extract
 cmd.extract_lines = function(coordinates)
-  local lines = vim.api.nvim_buf_get_lines(coordinates.bufnr, coordinates.from[1] - 1, coordinates.to[1], false)
+    local lines = vim.api.nvim_buf_get_lines(coordinates.bufnr, coordinates.from[1] - 1, coordinates.to[1], 0)
 
-  print(vim.inspect(lines))
+    if coordinates.from[2] ~= 0 then
+        lines[1] = string.sub(lines[1], coordinates.from[2])
+    end
 
-  return lines
+    if coordinates.to[2] ~= 0 then
+        if coordinates.from[1] == coordinates.to[1] then
+          lines[#lines] = string.sub(lines[#lines], 1, coordinates.to[2] - coordinates.from[2])
+        else
+          lines[#lines] = string.sub(lines[#lines], 1, coordinates.to[2])
+        end
+    end
+
+    return lines
 end
 
 --- buid_command
